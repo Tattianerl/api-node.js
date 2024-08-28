@@ -9,9 +9,16 @@ app.use(express.json());
 // Configuração da porta
 const port = process.env.PORT || 3333;
 
+const allowedOrigins = ['http://localhost:5173', 'https://finance-app-lime-one.vercel.app'];
+
 app.use(cors({
-  origin: 'http://localhost:5173', // Endereço do frontend
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
 }));
 
 
